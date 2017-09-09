@@ -1,0 +1,6 @@
+[submodule "vkbeautify"]
+	path = vkBeautify
+	url = https://github.com/vkiryukhin/vkBeautify.git
+[submodule "jquery.soap"]
+	path = jquery.soap
+	url = https://github.com/doedje/jquery.soap.git
