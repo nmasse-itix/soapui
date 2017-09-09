@@ -36,102 +36,102 @@
  */
 
 (function(factory) {
-	if(typeof module === 'object' && typeof module.exports === 'object') {
-	  module.exports = factory(require('jquery'));
-	} else if (jQuery) {
-	  factory(jQuery);
-	} else {
-		console.error('no jQuery found!')
-	}
+  if(typeof module === 'object' && typeof module.exports === 'object') {
+    module.exports = factory(require('jquery'));
+  } else if (jQuery) {
+    factory(jQuery);
+  } else {
+    console.error('no jQuery found!')
+  }
 })(function($) {
-	function soapui(root_node, soap_options) {
-		root_node = $(root_node); // Make sure it is a jQuery object
+  function soapui(root_node, soap_options) {
+    root_node = $(root_node); // Make sure it is a jQuery object
 
-		// Detect if vkbeautify is loaded
-		var vkbeautify = window.vkbeautify;
-		if (vkbeautify == null) {
-			console.log("vkbeautify not loaded, using a poor replacement for XML Pretty Printing");
-			vkbeautify = { xml: function (xml) {
-				// Poor man XML pretty printing
-				return xml.replace(/(>)|([^>])(?=<)/g, "$1$2\n");
-			} }
-		}
+    // Detect if vkbeautify is loaded
+    var vkbeautify = window.vkbeautify;
+    if (vkbeautify == null) {
+      console.log("vkbeautify not loaded, using a poor replacement for XML Pretty Printing");
+      vkbeautify = { xml: function (xml) {
+        // Poor man XML pretty printing
+        return xml.replace(/(>)|([^>])(?=<)/g, "$1$2\n");
+      } }
+    }
 
-		// SOAP request section
-		var soapActionNode = $(root_node).find("soap-action").get(0);
-		soapActionNode = soapActionNode != null ? $(soapActionNode) : null;
-		var soapAction = soapActionNode != null ? soapActionNode.text() : null;
-		if (soapAction != null && soapAction != "") {
-			soapActionNode.before("<span>SOAP Action</span>");
-			soapActionNode.replaceWith(function (i, e) {
-											return $("<input>", { value: soapAction, type: "text"});
-										});
-		} else {
-			soapActionNode.find("soap-action")
-										.remove();
-		}
+    // SOAP request section
+    var soapActionNode = $(root_node).find("soap-action").get(0);
+    soapActionNode = soapActionNode != null ? $(soapActionNode) : null;
+    var soapAction = soapActionNode != null ? soapActionNode.text() : null;
+    if (soapAction != null && soapAction != "") {
+      soapActionNode.before("<span>SOAP Action</span>");
+      soapActionNode.replaceWith(function (i, e) {
+                      return $("<input>", { value: soapAction, type: "text"});
+                    });
+    } else {
+      soapActionNode.find("soap-action")
+                    .remove();
+    }
 
-		var soapBodyNode = root_node.find("soap-body")
-											 			    .contents()
-														    .filter(function() {
-														      return this.nodeType == Node.COMMENT_NODE;
-														    })
-														    .get(0);
-		var soapBody = soapBodyNode != null ? soapBodyNode.data : "";
-		var newSoapBodyNode = $("<textarea>").text(soapBody);
-		root_node.find("soap-body")
-						 .replaceWith(newSoapBodyNode);
+    var soapBodyNode = root_node.find("soap-body")
+                                 .contents()
+                                .filter(function() {
+                                  return this.nodeType == Node.COMMENT_NODE;
+                                })
+                                .get(0);
+    var soapBody = soapBodyNode != null ? soapBodyNode.data : "";
+    var newSoapBodyNode = $("<textarea>").text(soapBody);
+    root_node.find("soap-body")
+             .replaceWith(newSoapBodyNode);
     newSoapBodyNode.before("<span>SOAP Body</span>");
 
-		var button = $("<input>", { 'type': 'submit',
-		                            'value': 'Try it out !'} ).appendTo(root_node);
+    var button = $("<input>", { 'type': 'submit',
+                                'value': 'Try it out !'} ).appendTo(root_node);
 
-		// SOAP Response section
-		var response_div = $("<div>", {'class': 'hidden'});
-		root_node.append(response_div);
+    // SOAP Response section
+    var response_div = $("<div>", {'class': 'hidden'});
+    root_node.append(response_div);
 
-		// SOAP Request
-		response_div.append($("<h2>SOAP Request Sent</h2>"));
-		var requestNode = $("<textarea>", { "readonly": true });
-		requestNode.appendTo(response_div);
+    // SOAP Request
+    response_div.append($("<h2>SOAP Request Sent</h2>"));
+    var requestNode = $("<textarea>", { "readonly": true });
+    requestNode.appendTo(response_div);
 
-		// SOAP Response
-		response_div.append($("<h2>SOAP Response Received</h2>"));
-		var responseNode = $("<textarea>", { "readonly": true });
-		responseNode.appendTo(response_div);
+    // SOAP Response
+    response_div.append($("<h2>SOAP Response Received</h2>"));
+    var responseNode = $("<textarea>", { "readonly": true });
+    responseNode.appendTo(response_div);
 
 
-		button.on('click', function (e) {
-			// stop the form to be submitted...
-			e.preventDefault();
+    button.on('click', function (e) {
+      // stop the form to be submitted...
+      e.preventDefault();
 
-			// empty the request and response panes
-			requestNode.empty();
-			responseNode.empty();
+      // empty the request and response panes
+      requestNode.empty();
+      responseNode.empty();
 
-			// Show the request and response pane
-			response_div.removeClass("hidden");
+      // Show the request and response pane
+      response_div.removeClass("hidden");
 
-			// Get the SOAP Body from the HTML form
-			soap_options.data = newSoapBodyNode.val();
+      // Get the SOAP Body from the HTML form
+      soap_options.data = newSoapBodyNode.val();
 
-			soap_options.beforeSend = function (soap) {
-				var request = soap.toString();
-				request = vkbeautify.xml(request, 2);
-				requestNode.text(request);
-			};
-			soap_options.success = function (soapResponse) {
-				soapResponse = soapResponse.toString();
-				soapResponse = vkbeautify.xml(soapResponse, 2);
-				responseNode.text(soapResponse);
-			};
-			soap_options.error = function (soapResponse) {
-				soapResponse = soapResponse.toString();
-				soapResponse = vkbeautify.xml(soapResponse, 2);
-				responseNode.text(soapResponse);
-			};
-			$.soap(soap_options);
-		});
+      soap_options.beforeSend = function (soap) {
+        var request = soap.toString();
+        request = vkbeautify.xml(request, 2);
+        requestNode.text(request);
+      };
+      soap_options.success = function (soapResponse) {
+        soapResponse = soapResponse.toString();
+        soapResponse = vkbeautify.xml(soapResponse, 2);
+        responseNode.text(soapResponse);
+      };
+      soap_options.error = function (soapResponse) {
+        soapResponse = soapResponse.toString();
+        soapResponse = vkbeautify.xml(soapResponse, 2);
+        responseNode.text(soapResponse);
+      };
+      $.soap(soap_options);
+    });
   };
 
   return $.soapui = soapui;
