@@ -1,0 +1,75 @@
+<!doctype html>
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>SOAPUI test page</title>
+		<script type='text/javascript' src='https://code.jquery.com/jquery-3.1.1.js'></script>
+		<script type='text/javascript' src='jquery.soap/jquery.soap.js'></script>
+		<script type='text/javascript' src='vkBeautify/vkbeautify.js'></script>
+		<script type='text/javascript' src='soapui.js'></script>
+		<script type='text/javascript'>
+		$(document).ready(function() {
+			$(".soapui").each(function (i, e) {
+				$.soapui(e, {
+					url: 'http://api.acme.test/ws',
+					HTTPHeaders: { "user-key": "<your user-key here>" },
+					enableLogging: true,
+					appendMethodToURL: false
+				});
+			});
+		});
+		</script>
+		<style>
+		.soapui span {
+			font-weight: bold;
+		}
+
+		.soapui textarea {
+			width: 80%;
+			display: block;
+			height: 200px;
+		}
+
+		.soapui input[type=text] {
+			width: 80%;
+			display: block;
+		}
+
+		.soapui .hidden {
+			display: none;
+		}
+		</style>
+	</head>
+	<body>
+		<h1>Get information about Spain</h1>
+		<div class="soapui">
+			<soap-action></soap-action>
+			<soap-body><!--
+<gs:getCountryRequest xmlns:gs="http://spring.io/guides/gs-producing-web-service">
+ <gs:name>Spain</gs:name>
+</gs:getCountryRequest>
+--></soap-body>
+		</div>
+
+		<h1>Get information about Poland</h1>
+		<div class="soapui">
+			<soap-action></soap-action>
+			<soap-body><!--
+<gs:getCountryRequest xmlns:gs="http://spring.io/guides/gs-producing-web-service">
+ <gs:name>Poland</gs:name>
+</gs:getCountryRequest>
+--></soap-body>
+		</div>
+
+		<h1>Get information about funny country</h1>
+		<div class="soapui">
+			<soap-action></soap-action>
+			<soap-body><!--
+<gs:getCountryRequest xmlns:gs="http://spring.io/guides/gs-producing-web-service">
+ <gs:name>The Moon</gs:name>
+</gs:getCountryRequest>
+--></soap-body>
+		</div>
+	</body>
+</html>
