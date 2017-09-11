@@ -33,7 +33,7 @@ feature is doomed to failure. The only example that this implementation
 can propose is a sample SOAP message with question marks in each field to
 fill-in.
 
-```
+```xml
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
 				  xmlns:acme="http://www.acme.com/">
    <soapenv:Header/>
@@ -63,14 +63,14 @@ the documentation and can try it out directly from the documentation page.
 Following this philosophy, the previous example would look like this:
 
 _To do this, you have to pass the `foo` field with bla bla bla. Try it by yourself:_
-```
+```xml
 <acme:doThisAndThat xmlns:acme="http://www.acme.com/">
    <acme:foo>123456</gs:foo>
 </acme:doThisAndThat>
 ```
 
 _To do this, you have to pass the `bar` field with bla bla bla. Try it by yourself:_
-```
+```xml
 <acme:doThisAndThat xmlns:acme="http://www.acme.com/">
    <acme:bar>ABCDEF</gs:bar>
 </acme:doThisAndThat>
@@ -105,7 +105,7 @@ Then, create a new page to hold the documentation of your SOAP Service with the 
  - Handler: *Leave empty*
 
 In the content, make sure to have at the top of your page:
-```
+```html
 <link rel="stylesheet" type="text/css" href="/css/soapui.css">
 <script type='text/javascript' src='/javascripts/jquery.soap.js'></script>
 <script type='text/javascript' src='/javascripts/vkbeautify.js'></script>
@@ -125,7 +125,7 @@ In the content, make sure to have at the top of your page:
 ```
 
 And then write your documentation as usual:
-```
+```html
 <h2>Description of our SOAP service</h2>
 blablabla
 <h2>The getCountry method</h2>
@@ -133,7 +133,7 @@ Here is what does the getCountry method. Blablabla.
 ```
 
 When you want to insert an example, write:
-```
+```html
 <div class="soapui">
 <soap-action>http://acme.com/getCountry</soap-action>
 <soap-body>
@@ -165,7 +165,7 @@ git submodule update
 
 Then, modify the `index.html` page to point to your sample SOAP service.
 You can also provide an API Key if you need one.
-```
+```js
 $.soapui(e, {
   url: 'http://api.acme.test/ws',
   HTTPHeaders: { "user-key": "<your user-key here>" },
