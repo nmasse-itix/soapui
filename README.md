@@ -87,8 +87,8 @@ with the following parameters:
 | Title | Section | Path | Content-Type | Content |
 | --- | --- | --- | --- | --- |
 | soapui.js | &#124;--javascripts | `/javascripts/soapui.js` | `text/javascript` | [soapui.js](soapui.js) |
-| jquery.soap.js | &#124;--javascripts | `/javascripts/jquery.soap.js` | `text/javascript` | [jquery.soap.js](jquery.soap/jquery.soap.js) |
-| vkbeautify.js | &#124;--javascripts | `/javascripts/vkbeautify.js` | `text/javascript` | [vkbeautify.js](vkBeautify/vkbeautify.js) |
+| jquery.soap.js | &#124;--javascripts | `/javascripts/jquery.soap.js` | `text/javascript` | [jquery.soap.js](https://github.com/doedje/jquery.soap/blob/master/jquery.soap.js) |
+| vkbeautify.js | &#124;--javascripts | `/javascripts/vkbeautify.js` | `text/javascript` | [vkbeautify.js](https://github.com/vkiryukhin/vkBeautify/blob/master/vkbeautify.js) |
 | soapui.css | &#124;--css | `/css/soapui.css` | `text/css` | [soapui.css](soapui.css) |
 
 All those pages share the same common parameters:
