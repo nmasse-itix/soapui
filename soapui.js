@@ -44,7 +44,41 @@
     console.error('no jQuery found!')
   }
 })(function($) {
-  function soapui(root_node, soap_options) {
+  function threescale_authentication(select_node, soap_options) {
+    $.ajax("/api_docs/account_data.json", {
+      statusCode: {
+        200: function (data, textStatus, xhr) {
+          var user_keys = data.results.user_keys;
+          for (var i = 0; i < user_keys.length; i++) {
+            var name = user_keys[i].name;
+            var value = user_keys[i].value;
+            select_node.append($("<option>", { text: name, value: value }));
+          }
+        },
+        401: function (xhr, textStatus, error) {
+          // TODO Handle the error and display an error message
+          console.log("ERROR: Could not fetch API Keys from the 3scale API.")
+        }
+      }
+    });
+    select_node.on('change', function (e) {
+      if (e.target.value != null && e.target.value != "") {
+        if (soap_options.HTTPHeaders == null) {
+          soap_options.HTTPHeaders = {};
+        }
+
+        soap_options.HTTPHeaders["user-key"] = e.target.value;
+      }
+    });
+
+  };
+  function soapui(nodes, soap_options, custom_auth_schemes) {
+    $(nodes).each(function (i, e) {
+      var soap_options_copy = jQuery.extend({}, soap_options);
+      init(e, soap_options_copy, custom_auth_schemes);
+    });
+  };
+  function init(root_node, soap_options, custom_auth_schemes) {
     root_node = $(root_node); // Make sure it is a jQuery object
 
     // Detect if vkbeautify is loaded
@@ -78,11 +112,22 @@
                                 })
                                 .get(0);
     var soapBody = soapBodyNode != null ? soapBodyNode.data : "";
-    var newSoapBodyNode = $("<textarea>").text(soapBody);
+    var newSoapBodyNode = $("<textarea>").text(soapBody.trim());
     root_node.find("soap-body")
              .replaceWith(newSoapBodyNode);
     newSoapBodyNode.before("<span>SOAP Body</span>");
 
+
+    var select = $("<select>", { } ).appendTo(root_node);
+    $("<option>", { disabled: true,
+                    selected: true,
+                    label: "Select an authentication mechanism..." } ).appendTo(select);
+    // Populate the dropdown list with custom auth. schemes
+    if (typeof custom_auth_schemes === "function") {
+      custom_auth_schemes(select, soap_options);
+    }
+
+    // Then, create the submit button
     var button = $("<input>", { 'type': 'submit',
                                 'value': 'Try it out !'} ).appendTo(root_node);
 
@@ -100,7 +145,6 @@
     var responseNode = $("<textarea>", { "readonly": true });
     responseNode.appendTo(response_div);
 
-
     button.on('click', function (e) {
       // stop the form to be submitted...
       e.preventDefault();
@@ -116,23 +160,45 @@
       soap_options.data = newSoapBodyNode.val();
 
       soap_options.beforeSend = function (soap) {
-        var request = soap.toString();
-        request = vkbeautify.xml(request, 2);
+        // Dump Request Line
+        var request = "POST " + soap_options.url + "\n";
+
+        // Dump Headers
+        if (soap_options.HTTPHeaders != null) {
+          for (var k in soap_options.HTTPHeaders) {
+            if (soap_options.HTTPHeaders.hasOwnProperty(k)) {
+              request += k + ": " + soap_options.HTTPHeaders[k] + "\n";
+            }
+          }
+        }
+        request += "\n";
+
+        // Dump the SOAP Request
+        request += vkbeautify.xml(soap.toString(), 2);
         requestNode.text(request);
       };
       soap_options.success = function (soapResponse) {
-        soapResponse = soapResponse.toString();
-        soapResponse = vkbeautify.xml(soapResponse, 2);
-        responseNode.text(soapResponse);
+        var responseText = "HTTP " + soapResponse.httpCode + " "
+                                   + soapResponse.httpText + "\n\n"
+                                   + vkbeautify.xml(soapResponse.toString(), 2);
+        responseNode.text(responseText);
       };
-      soap_options.error = function (soapResponse) {
-        soapResponse = soapResponse.toString();
-        soapResponse = vkbeautify.xml(soapResponse, 2);
-        responseNode.text(soapResponse);
+      soap_options.error = function (soapResponse, xhr) {
+        if (soapResponse.httpCode == 0) { // Network error
+          responseNode.text("Could not get a reponse from server. Check network connectivity and SSL/TLS certificates.");
+        } else {
+          var responseText = "HTTP " + soapResponse.httpCode + " "
+                                     + soapResponse.httpText + "\n\n"
+                                     + vkbeautify.xml(soapResponse.toString(), 2);
+          responseNode.text(responseText);
+        }
       };
       $.soap(soap_options);
     });
+
   };
 
-  return $.soapui = soapui;
+  $.soapui = soapui;
+  $.threescale_authentication = threescale_authentication;
+  return $;
 });

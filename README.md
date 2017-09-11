@@ -69,7 +69,7 @@ _To do this, you have to pass the `foo` field with bla bla bla. Try it by yourse
 </acme:doThisAndThat>
 ```
 
-_To do this, you have to pass the `bar` field with bla bla bla. Try it by yourself:_
+_To do that, you have to pass the `bar` field with bla bla bla. Try it by yourself:_
 ```xml
 <acme:doThisAndThat xmlns:acme="http://www.acme.com/">
    <acme:bar>ABCDEF</gs:bar>
@@ -112,14 +112,11 @@ In the content, make sure to have at the top of your page:
 <script type='text/javascript' src='/javascripts/soapui.js'></script>
 <script type='text/javascript'>
     $(document).ready(function() {
-      $(".soapui").each(function (i, e) {
-        $.soapui(e, {
+      $.soapui($(".soapui"), {
           url: 'http://api.acme.test/ws',
-          HTTPHeaders: { "user-key": "<your user-key here>" },
           enableLogging: true,
           appendMethodToURL: false
-        });
-      });
+      }, $.threescale_authentication);
     });
 </script>
 ```

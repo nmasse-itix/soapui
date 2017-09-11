@@ -10,13 +10,11 @@
     <script type='text/javascript' src='soapui.js'></script>
     <script type='text/javascript'>
     $(document).ready(function() {
-      $(".soapui").each(function (i, e) {
-        $.soapui(e, {
+      $.soapui($(".soapui"), {
           url: 'http://api.acme.test/ws',
           HTTPHeaders: { "user-key": "<your user-key here>" },
           enableLogging: true,
           appendMethodToURL: false
-        });
       });
     });
     </script>
