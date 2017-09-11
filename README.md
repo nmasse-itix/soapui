@@ -54,7 +54,7 @@ re-use the content of existing SOAP documentation (the meaty PDF or Word
 documentation).
 
 Most of this content can already be moved to an API Developer Portal, presented
-as nice to read Web Pages.
+as nice-to-read Web Pages.
 
 This project provides a way to document the sample SOAP calls, with an
 interactive interface where the developer can discover examples when reading
@@ -85,7 +85,7 @@ Load the following files in the 3scale Developer Portal, by creating new pages
 with the following parameters:
 
 | Title | Section | Path | Content-Type | Content |
-----
+| --- | --- | --- | --- | --- |
 | soapui.js | `|--javascripts` | `/javascripts/soapui.js` | `text/javascript` | [soapui.js](soapui.js) |
 | jquery.soap.js | `|--javascripts` | `/javascripts/jquery.soap.js` | `text/javascript` | [jquery.soap.js](jquery.soap/jquery.soap.js) |
 | vkbeautify.js | `|--javascripts` | `/javascripts/vkbeautify.js` | `text/javascript` | [vkbeautify.js](vkBeautify/vkbeautify.js) |
@@ -104,7 +104,7 @@ Then, create a new page to hold the documentation of your SOAP Service with the 
  - Liquid Enabled: unchecked
  - Handler: *Leave empty*
 
-In the content, make sure to have at the top at least:
+In the content, make sure to have at the top of your page:
 ```
 <link rel="stylesheet" type="text/css" href="/css/soapui.css">
 <script type='text/javascript' src='/javascripts/jquery.soap.js'></script>
