@@ -95,11 +95,10 @@
     var soapActionNode = $(root_node).find("soap-action").get(0);
     soapActionNode = soapActionNode != null ? $(soapActionNode) : null;
     var soapAction = soapActionNode != null ? soapActionNode.text() : null;
+    var newSoapActionNode = $("<input>", { value: soapAction, type: "text"});
     if (soapAction != null && soapAction != "") {
       soapActionNode.before("<span>SOAP Action</span>");
-      soapActionNode.replaceWith(function (i, e) {
-                      return $("<input>", { value: soapAction, type: "text"});
-                    });
+      soapActionNode.replaceWith(newSoapActionNode);
     } else {
       soapActionNode.find("soap-action")
                     .remove();
@@ -156,6 +155,11 @@
       // Show the request and response pane
       response_div.removeClass("hidden");
 
+      // Set the SOAPAction
+      if (soapAction != null && soapAction != "") {
+        soap_options.SOAPAction = newSoapActionNode.val();
+      }
+
       // Get the SOAP Body from the HTML form
       soap_options.data = newSoapBodyNode.val();
 
@@ -170,6 +174,9 @@
               request += k + ": " + soap_options.HTTPHeaders[k] + "\n";
             }
           }
+        }
+        if (soapAction != null && soapAction != "") {
+          request += "SOAPAction: " + newSoapActionNode.val() + "\n";
         }
         request += "\n";
 
