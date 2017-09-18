@@ -2,6 +2,10 @@
   font-weight: bold;
 }
 
+.soapui select, .soapui input[type=submit] {
+  margin-top: 10px;
+}
+
 .soapui textarea {
   width: 80%;
   display: block;
@@ -9,7 +13,6 @@
   line-height: 1.2em;
   overflow: auto;
   height: 200px;
-  cursor: pointer;
   background-color: #fcf6db;
   border: 1px solid #e5e0c6;
 }
@@ -17,6 +20,9 @@
 .soapui input[type=text] {
   width: 80%;
   display: block;
+  font-size: .85em;
+  background-color: #fcf6db;
+  border: 1px solid #e5e0c6;
 }
 
 .soapui select {
