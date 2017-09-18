@@ -175,9 +175,6 @@
             }
           }
         }
-        if (soapAction != null && soapAction != "") {
-          request += "SOAPAction: " + newSoapActionNode.val() + "\n";
-        }
         request += "\n";
 
         // Dump the SOAP Request
